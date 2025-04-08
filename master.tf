@@ -17,7 +17,7 @@ locals {
 
 resource "aws_instance" "master" {
   ami = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
+  instance_type = var.master_instance_type
 
   associate_public_ip_address = true
 
@@ -75,7 +75,7 @@ resource "null_resource" "master_setup" {
   provisioner "remote-exec" {
     inline = [
       "echo SETTING UP NODES....",
-      "${var.loadtest_master_entrypoint}",
+      "${var.master_entrypoint}",
     ]
   }
 

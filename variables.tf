@@ -3,10 +3,15 @@ variable "project_name" {
   type        = string
 }
 
-variable "instance_type" {
-  description = "EC2 instance type for master and worker nodes"
+variable "master_instance_type" {
+  description = "EC2 instance type for master nodes"
   type        = string
   default     = "t3.micro"
+}
+variable "worker_instance_type" {
+  description = "EC2 instance type for worker nodes"
+  type        = string
+  default     = "t3.medium"
 }
 
 variable "worker_count" {
@@ -26,7 +31,11 @@ variable "test_files_directory" {
   default     = ""
 }
 
-variable "loadtest_master_entrypoint" {
+variable "master_entrypoint" {
+  description = "Path to the entrypoint command"
+  type        = string
+}
+variable "worker_entrypoint" {
   description = "Path to the entrypoint command"
   type        = string
 }
