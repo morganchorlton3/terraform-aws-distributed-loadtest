@@ -1,9 +1,33 @@
 # AWS Distributed LoadTest Terraform Module
 
 ## Credit 
-This module was created from [marcosborges/terraform-aws-loadtest-distribuited](marcosborges/terraform-aws-loadtest-distribuited) but I had a few issues and that repo does not 
-seem to be maintained anymore 
+This module was created from [marcosborges/terraform-aws-loadtest-distribuited](marcosborges/terraform-aws-loadtest-distribuited) but I had a few issues and that repo does not seem to be maintained anymore 
 
+
+## Examples
+
+### Locust
+
+```hcl
+module "loadtest" {
+  source = "../../"
+
+  project_name         = "load-test"
+  test_files_directory = "${path.root}/../../performance"
+
+  master_instance_type = "t3.micro"
+  worker_count         = 1
+  load_test_tool       = "locust"
+  master_entrypoint    = <<-EOT
+    pip3 install dotenv # example to install additional packages
+    nohup locust -f performance/locustfile.py --master --expect-workers=1 > locust-leader.out 2>&1 &
+  EOT
+  worker_entrypoint    = <<-EOT
+    pip3 install dotenv # example to install additional packages
+    nohup locust -f performance/locustfile.py --worker --master-host={LEADER_IP} > locust-leader.out 2>&1 &
+  EOT
+}
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
